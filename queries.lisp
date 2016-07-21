@@ -1,7 +1,6 @@
 ;;; file queries.lisp
 (in-package :ut)
 
-;;(defparameter *db-connection* '("localhost" "lab" "root" "smjh13oo"))
 ;;(clsql:file-enable-sql-reader-syntax)
 ;;(clsql:disable-sql-reader-syntax)
 ;;(clsql:enable-sql-reader-syntax)
