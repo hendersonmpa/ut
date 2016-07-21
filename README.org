@@ -1,0 +1,15 @@
+#+TITLE: UT Readme
+
+* Refactor
+** DONE Convert structs to objects
+   CLOSED: [2016-06-18 Sat 18:33]
+** TODO component_name to test_name
+** TODO timeseries and testseries to gnuplot
+
+* Analyte report
+** TODO test/pateint day
+* Division report
+** DONE Recreate the division directory and naming.
+   CLOSED: [2016-06-18 Sat 14:39]
+** TODO tests/patient day
+** TODO Create pdf report
