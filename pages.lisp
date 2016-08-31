@@ -106,7 +106,7 @@
       (if (quantitative-p *dataset*)
           (cl-who:htm (:img :src "/figures/histogram.png" :alt "distribution of results"))
           (cl-who:htm (:img :src "/figures/barchartresult.png" :alt "distribution of results")))
-      (:img :src "/figures/test_ts.png" :alt "test timeseries")
+      (:img :src "/figures/testts.png" :alt "test timeseries")
       (:p (:a :href "/docs" "Next: Providers")))))
 
 (define-easy-handler (docs :uri "/docs") ()

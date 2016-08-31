@@ -28,7 +28,7 @@
       `(flet ((filter-p (,row)
                 (funcall (lambda ,arg-list
                            (and ,@(mapcar (lambda (arg) `(not (null ,arg))) arg-list)
-                               ,@test-list))
+                                ,@test-list))
                          ,@(mapcar (lambda (key) `(getf ,row ,key)) key-list))))
          (remove-if-not #'filter-p ,data)))))
 
@@ -59,21 +59,6 @@
     (remove-if-not #'filter-p data)))
 
 ;; (make-filter :provider :location)
-
-;; (setq filter-t (make-filter :provider :location))
-;; (funcall filter-t '(:MRN "008665473" :PROVIDER "DABEE, VASSANT" :SPECIALTY "Paediatrics"
-;;                     :LOCATION "PEDIATRIC MEDICINE" :VERIFIED-DT @2015-07-28T1004
-;;                     :RESULT "2.85" :CLEAN-RESULT 2.85 :LAB "TOH" :UNITS "mIU/L" :COMPONENT-NAME
-;;                     "TSH") "DABEE, VASSANT" "pediatric medicine")
-
-
-;; (member '(:MRN "008665473" :PROVIDER "DABEE, VASSANT" :SPECIALTY "Paediatrics"
-;;           :LOCATION "PEDIATRIC MEDICINE" :VERIFIED-DT @2015-07-28T1004
-;;           :RESULT "2.85" :CLEAN-RESULT 2.85 :LAB "TOH" :UNITS "mIU/L" :COMPONENT-NAME
-;;           "TSH") '("pediatric medicine")
-;;           :key #'(lambda (row) (getf row :location))
-;;           :test #'string-equal)
-
 
 (defun shallow-copy-object (original)
   (let* ((class (class-of original))

@@ -87,4 +87,5 @@
                                :author "Matthew P.A. Henderson")))
 
 
+;;; (make-pdf "peds" '("4 West" "4 east" "5 east") '("creatinine" "tsh"))
 (make-pdf "peds" '("4 West" "4 east" "5 east") '("creatinine" "tsh"))

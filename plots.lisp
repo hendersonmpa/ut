@@ -103,7 +103,7 @@ Select entity with COL :mrn, :physician, or :location"
   (let ((ym-freq (year-month-freq (data dataset)))
         (test-name (test-name dataset))
         (price (coerce (price dataset) 'single-float))
-        (file-name (merge-pathnames *figures-dir* "testts.svg")))
+        (file-name (merge-pathnames *figures-dir* "testts.png")))
     (eazy-gnuplot:with-plots (*standard-output* :debug nil)
       (eazy-gnuplot:gp-setup :output file-name
                              :terminal '(png size (1200 742) enhanced font "Verdana,8")
@@ -143,7 +143,7 @@ Select entity with COL :mrn, :physician, or :location"
                              :xlabel xlabel
                              :ylabel ylabel
                              :ytic '(nomirror font ",8")
-                             :xtic '(textcolor rgb ("'#000000'") nomirror font ",8")
+                             :xtic '(nomirror font ",8")
                              :tic '(nomirror out scale 0.75)
                              :border '(3 front linecolor rgb ("'#808080'") lt 1)
                              :pointsize .5
@@ -300,12 +300,11 @@ Select entity with COL :mrn, :physician, or :location"
 
 
 ;;; OVERVIEW PLOTS :::::::::::::::::::::::::::::::::
-(defun barchart-group (group-data group-field group-name &optional (n 20))
-  (let* ((clean-group-name (remove #\- group-name))
-         (file-name (merge-pathnames *figures-dir*
-                                    (concatenate 'string "barchart" clean-group-name ".png")))
+(defun barchart-group (group-data group-name &optional (n 20))
+  (let* ((file-name (merge-pathnames *figures-dir*
+                                     (concatenate 'string "barchart" group-name ".png")))
         (aggregate-data (top-n (aggregate-group group-data
-                                            :group-col group-field
+                                            :group-col :group-field
                                             :sum-col :test-count) n)))
         (eazy-gnuplot:with-plots (*standard-output* :debug nil)
       (eazy-gnuplot:gp-setup :output file-name
@@ -341,7 +340,7 @@ MRN"
                                                  :group-col :group-field
                                                  :sum-col :test-count) n))
          (selection (mapcar #'first aggregate-data))
-         (dir-string (namestring (asdf:system-relative-pathname 'lab "")))
+         (dir-string (namestring (asdf:system-relative-pathname 'ut "")))
          (ts-filename (concatenate 'string "outfile='" dir-string "figures/" group-name "ts.svg'"))
          (ts-script (concatenate 'string dir-string "line_plot.gp")))
     (with-open-file (out (merge-pathnames *figures-dir* "group_ts_data.txt")
@@ -357,4 +356,10 @@ MRN"
                   (declare (ignore mrn-count))
                   (format out "~S ~D ~D~%" group-field year-month test-count))
                 (format out "~%~%~S~%" (string-capitalize section)))))))
+    (print ts-filename)
     (uiop:run-program (list "/usr/bin/gnuplot" "-e" ts-filename ts-script))))
+
+(defun make-group-plots (group-name &optional (n 20))
+  (let ((group-data (group-query group-name)))
+    (barchart-group group-data group-name n)
+    (group-ts group-data group-name n)))

@@ -59,7 +59,7 @@ ON result.test_id = price.test_id"))))
     (dbi:prepare *connection* "SHOW TABLES like ?") table-name)))
 
 (defun create-test-view ()
-  (dbi:execute (dbi:prepare *connection* "CREATE OR REPLACE VIEW test AS
+  (dbi:execute (dbi:preparen *connection* "CREATE OR REPLACE VIEW test AS
         (SELECT r.MRN, r.TEST_NAME, r.COMPONENT_NAME, r.RESULT, r.COMPONENT_UNITS, r.VERIFIED_DATETIME, r.ORDERING_DEPARTMENT_NAME,
         r.AUTHORIZING_PROVIDER_NAME, r.RESULTING_SECTION_NAME, p.SPECIALTY from result as r
        JOIN provider as p
@@ -99,7 +99,7 @@ group by test_name , ordered_datetime"))
     (loop for (k1 test-name k2 provider k3 location k4 verified-dt) = (dbi:fetch data)
        while (or test-name provider location)
        collect (list :test-name test-name
-                     :provider  (sxhash provider)
+                     :provider provider;; (sxhash provider)
                      :location location
                      :verified-dt (handler-parse-universal verified-dt)))))
 
