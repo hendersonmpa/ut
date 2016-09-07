@@ -59,12 +59,12 @@ ON result.test_id = price.test_id"))))
     (dbi:prepare *connection* "SHOW TABLES like ?") table-name)))
 
 (defun create-test-view ()
-  (dbi:execute (dbi:preparen *connection* "CREATE OR REPLACE VIEW test AS
+  (dbi:execute (dbi:prepare *connection* "CREATE OR REPLACE VIEW test AS
         (SELECT r.MRN, r.TEST_NAME, r.COMPONENT_NAME, r.RESULT, r.COMPONENT_UNITS, r.VERIFIED_DATETIME, r.ORDERING_DEPARTMENT_NAME,
         r.AUTHORIZING_PROVIDER_NAME, r.RESULTING_SECTION_NAME, p.SPECIALTY from result as r
        JOIN provider as p
        ON p.id = r.authorizing_provider_id
-        where ORDERED_DATETIME > DATE(NOW()-INTERVAL 1 YEAR) group by TEST_NAME, ACCESSION)")))
+        where VERIFIED_DATETIME >= DATE(NOW()-INTERVAL 1 YEAR) group by TEST_NAME, ACCESSION)")))
 
 (defun test-query (test-name &key (new nil) (anonymous nil))
   "get data for the analyte report: used to create data-set object"

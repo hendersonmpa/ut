@@ -1,8 +1,8 @@
 #!/usr/bin/gnuplot
-set terminal svg size 900,450 enhanced font 'Verdana,8'
+set terminal png size 1200,742 enhanced font 'Verdana,8'
 #set output 'sections.svg'
 set output outfile
-datafile="/home/mpah/lisp/site/lab/figures/group_ts_data.txt"
+datafile="/home/mpah/lisp/site/ut/figures/group_ts_data.txt"
 set key top rmargin
 
 ## Time series

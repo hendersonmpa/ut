@@ -341,7 +341,7 @@ MRN"
                                                  :sum-col :test-count) n))
          (selection (mapcar #'first aggregate-data))
          (dir-string (namestring (asdf:system-relative-pathname 'ut "")))
-         (ts-filename (concatenate 'string "outfile='" dir-string "figures/" group-name "ts.svg'"))
+         (ts-filename (concatenate 'string "outfile='" dir-string "figures/" group-name "ts.png'"))
          (ts-script (concatenate 'string dir-string "line_plot.gp")))
     (with-open-file (out (merge-pathnames *figures-dir* "group_ts_data.txt")
                          :direction :output
@@ -355,11 +355,17 @@ MRN"
                 (destructuring-bind (&key group-field year-month test-count mrn-count) row
                   (declare (ignore mrn-count))
                   (format out "~S ~D ~D~%" group-field year-month test-count))
-                (format out "~%~%~S~%" (string-capitalize section)))))))
+                (progn ;; else: start new header and print results
+                  (format out "~%~%~S~%" (string-capitalize section))
+                  (destructuring-bind (&key group-field year-month test-count mrn-count) row
+                    (declare (ignore mrn-count))
+                    (format out "~S ~D ~D~%" group-field year-month test-count))))))))
     (print ts-filename)
     (uiop:run-program (list "/usr/bin/gnuplot" "-e" ts-filename ts-script))))
 
-(defun make-group-plots (group-name &optional (n 20))
-  (let ((group-data (group-query group-name)))
-    (barchart-group group-data group-name n)
-    (group-ts group-data group-name n)))
+(defun make-group-plots (&key
+                           (group-list '("AUTHORIZING_PROVIDER_NAME" "RESULTING_SECTION_NAME" "ORDERING_DEPARTMENT_NAME" "MRN" "TEST_NAME"))  (n 20))
+  (mapcar (lambda (group-name)
+            (let ((group-data (group-query group-name)))
+              (barchart-group group-data group-name n)
+              (group-ts group-data group-name n))) group-list))
